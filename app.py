@@ -8,26 +8,28 @@ external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 
 app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
 
-df = pd.read_csv(
-    'https://raw.githubusercontent.com/'
-    'plotly/datasets/master/'
-    '1962_2006_walmart_store_openings.csv')
+# df = pd.read_csv(
+#     'https://raw.githubusercontent.com/'
+#     'plotly/datasets/master/'
+#     '1962_2006_walmart_store_openings.csv')
 
-# df = pd.read_csv('./all_uscrn_data.txt', delim_whitespace=True, header=None, usecols = [0,1,3,4,5,6,7,8], names =['WBAN','YM','LON','LAT','MAX','MIN','MEAN','AVG',])
+df = pd.read_csv('./all_uscrn_data.txt', delim_whitespace=True, header=None, usecols = [0,1,3,4,5,6,7,8], names =['WBAN','YM','LON','LAT','MAX','MIN','MEAN','AVG',])
+
+sites = df.drop_duplicates(subset=['WBAN','LON', 'LAT'])
 
 app.layout = html.Div([
-    html.H1('Walmart Store Openings'),
+    html.H1('USCRN Sites'),
     html.Div(id='text-content'),
     dcc.Graph(id='map', figure={
         'data': [{
             'lat': df['LAT'],
             'lon': df['LON'],
             'marker': {
-                'color': df['YEAR'],
+                'color': 'red',
                 'size': 8,
                 'opacity': 0.6
             },
-            'customdata': df['storenum'],
+            'customdata': df['WBAN'],
             'type': 'scattermapbox'
         }],
         'layout': {
@@ -41,19 +43,19 @@ app.layout = html.Div([
 ])
 
 
-@app.callback(
-    dash.dependencies.Output('text-content', 'children'),
-    [dash.dependencies.Input('map', 'hoverData')])
-def update_text(hoverData):
-    s = df[df['storenum'] == hoverData['points'][0]['customdata']]
-    return html.H3(
-        'The {}, {} {} opened in {}'.format(
-            s.iloc[0]['STRCITY'],
-            s.iloc[0]['STRSTATE'],
-            s.iloc[0]['type_store'],
-            s.iloc[0]['YEAR']
-        )
-    )
+# @app.callback(
+#     dash.dependencies.Output('text-content', 'children'),
+#     [dash.dependencies.Input('map', 'hoverData')])
+# def update_text(hoverData):
+#     s = df[df['storenum'] == hoverData['points'][0]['customdata']]
+#     return html.H3(
+#         'The {}, {} {} opened in {}'.format(
+#             s.iloc[0]['STRCITY'],
+#             s.iloc[0]['STRSTATE'],
+#             s.iloc[0]['type_store'],
+#             s.iloc[0]['YEAR']
+#         )
+#     )
 
 
 if __name__ == '__main__':
