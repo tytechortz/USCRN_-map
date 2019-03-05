@@ -22,11 +22,11 @@ app.layout = html.Div([
     html.Div(id='text-content'),
     dcc.Graph(id='map', figure={
         'data': [{
-            'lat': df['LAT'],
-            'lon': df['LON'],
+            'lat': sites['LAT'],
+            'lon': sites['LON'],
             'marker': {
                 'color': 'red',
-                'size': 8,
+                'size': 4,
                 'opacity': 0.6
             },
             'customdata': df['WBAN'],
@@ -34,10 +34,12 @@ app.layout = html.Div([
         }],
         'layout': {
             'mapbox': {
-                'accesstoken': 'pk.eyJ1IjoiY2hyaWRkeXAiLCJhIjoiY2ozcGI1MTZ3MDBpcTJ3cXR4b3owdDQwaCJ9.8jpMunbKjdq1anXwU5gxIw'
+                'accesstoken': 'pk.eyJ1IjoidHl0ZWNob3J0eiIsImEiOiJjanN1emtuc2cwMXNhNDNuejdrMnN2aHYyIn0.kY0fOoozCTY-4IUzcLx22w',
+                'zoom':5
             },
             'hovermode': 'closest',
-            'margin': {'l': 0, 'r': 0, 'b': 0, 't': 0}
+            'margin': {'l': 0, 'r': 0, 'b': 0, 't': 0},
+            
         }
     })
 ])
